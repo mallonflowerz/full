@@ -1,21 +1,17 @@
 package com.apirest.full.model;
 
-import java.util.Set;
-
 import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "equipo")
-public class EquipoModel {
-
+@Table(name = "grupo_b")
+public class GrupoBModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private Long id;
+    private Long idB;
 
     private String nombre;
     private int puntaje;
-    
 }

@@ -10,10 +10,13 @@ import org.springframework.stereotype.Service;
 import com.apirest.full.model.EquipoModel;
 import com.apirest.full.respository.EquipoRepository;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 @Service
 public class EquipoService {
-    @Autowired
-    private EquipoRepository equipoRepository;
+
+    private final EquipoRepository equipoRepository;
 
     public List<EquipoModel> obtenerEquipo(){
         Sort sortByPriceDesc = Sort.by(Sort.Order.desc("puntaje"));

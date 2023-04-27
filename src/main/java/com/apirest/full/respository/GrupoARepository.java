@@ -9,4 +9,5 @@ import com.apirest.full.model.GrupoAModel;
 
 public interface GrupoARepository extends JpaRepository<GrupoAModel, Long>{
     public abstract List<GrupoAModel> findAll(Sort sort);
+    List<GrupoAModel> findAllByNombre(String nombre);
 }
