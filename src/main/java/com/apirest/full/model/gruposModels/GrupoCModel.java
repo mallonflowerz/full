@@ -1,20 +1,18 @@
-package com.apirest.full.model;
+package com.apirest.full.model.gruposModels;
 
 import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "grupo_a")
-public class GrupoAModel {
-
+@Table(name = "grupo_c")
+public class GrupoCModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private Long idA;
+    private Long idC;
 
     private String nombre;
     private int puntaje;
-
+    private int partidos;
 }
-

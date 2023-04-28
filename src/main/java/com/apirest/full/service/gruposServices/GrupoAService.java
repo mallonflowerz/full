@@ -1,4 +1,4 @@
-package com.apirest.full.service;
+package com.apirest.full.service.gruposServices;
 
 import java.util.List;
 
@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.apirest.full.model.GrupoAModel;
-import com.apirest.full.respository.GrupoARepository;
+import com.apirest.full.model.gruposModels.GrupoAModel;
+import com.apirest.full.respository.gruposRepository.GrupoARepository;
 
 import lombok.AllArgsConstructor;
 
@@ -28,6 +28,10 @@ public class GrupoAService {
 
     public List<GrupoAModel> agregarVarios(Iterable<GrupoAModel> grupoAModels){
         return grupoARepository.saveAll(grupoAModels);
+    }
+
+    public List<GrupoAModel> topTwo(){
+        return grupoARepository.findTop2ByOrderByPuntajeDesc();
     }
 
     public GrupoAModel guardarEquipo(GrupoAModel grupoAModel){

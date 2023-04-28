@@ -1,4 +1,4 @@
-package com.apirest.full.controller;
+package com.apirest.full.controller.gruposController;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,13 +16,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.apirest.full.model.GrupoAModel;
-import com.apirest.full.service.GrupoAService;
+import com.apirest.full.model.gruposModels.GrupoAModel;
+import com.apirest.full.service.gruposServices.GrupoAService;
 
 @RestController
 @RequestMapping("/grupoa")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class GrupoAController {
+
     @Autowired
     private GrupoAService grupoAService;
 
@@ -68,6 +69,7 @@ public class GrupoAController {
             grupo.setIdA(g.getIdA());
             grupo.setNombre(g.getNombre());
             grupo.setPuntaje(g.getPuntaje() + numeros.get(repeat));
+            grupo.setPartidos(g.getPartidos() + 1);
             deList.add(grupo);
             grupoAService.agregarVarios(deList);
             repeat += 1;
@@ -114,6 +116,7 @@ public class GrupoAController {
                 grupo.setIdA(g.getIdA());
                 grupo.setNombre(g.getNombre());
                 grupo.setPuntaje(0);
+                grupo.setPartidos(0);
                 deList.add(grupo);
                 grupoAService.agregarVarios(deList);
             }

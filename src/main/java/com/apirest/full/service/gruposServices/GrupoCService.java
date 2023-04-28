@@ -1,12 +1,12 @@
-package com.apirest.full.service;
+package com.apirest.full.service.gruposServices;
 
 import java.util.List;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.apirest.full.model.GrupoCModel;
-import com.apirest.full.respository.GrupoCRepository;
+import com.apirest.full.model.gruposModels.GrupoCModel;
+import com.apirest.full.respository.gruposRepository.GrupoCRepository;
 
 import lombok.AllArgsConstructor;
 
@@ -27,6 +27,14 @@ public class GrupoCService {
 
     public GrupoCModel guardarEquipo(GrupoCModel GrupoCModel){
         return grupoCRepository.save(GrupoCModel);
+    }
+
+    public List<GrupoCModel> agregarVarios(Iterable<GrupoCModel> grupoCModels){
+        return grupoCRepository.saveAll(grupoCModels);
+    }
+
+    public List<GrupoCModel> topTwo(){
+        return grupoCRepository.findTop2ByOrderByPuntajeDesc();
     }
 
     public Long cantidad(){
