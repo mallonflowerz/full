@@ -1,14 +1,16 @@
 package com.apirest.full.model;
 
-import java.util.Optional;
+import jakarta.persistence.Entity;
+
+import java.util.List;
 
 import jakarta.persistence.*;
 import lombok.Data;
 
-@Data
 @Entity
-@Table(name = "equipo")
-public class EquipoModel {
+@Data
+@Table(name = "grupo")
+public class GrupoModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,10 +18,7 @@ public class EquipoModel {
     private Long id;
 
     private String nombre;
-    private int puntaje;
 
-    @ManyToOne
-    @JoinColumn(name = "grupo_id")
-    private GrupoModel grupo;
-    
+    @OneToMany(mappedBy = "grupo", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private List<EquipoModel> equipos;
 }

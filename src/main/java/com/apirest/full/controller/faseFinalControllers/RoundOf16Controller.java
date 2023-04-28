@@ -10,7 +10,6 @@ import java.util.Random;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.apirest.full.model.clases.Equipo;
 import com.apirest.full.model.faseFinalModels.RoundOf16;
 import com.apirest.full.model.gruposModels.GrupoAModel;
 import com.apirest.full.model.gruposModels.GrupoBModel;

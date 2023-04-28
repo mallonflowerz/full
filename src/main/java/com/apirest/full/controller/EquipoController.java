@@ -1,7 +1,10 @@
 package com.apirest.full.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import javax.naming.NameNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,59 +18,66 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.apirest.full.model.EquipoModel;
+import com.apirest.full.model.GrupoModel;
 import com.apirest.full.service.EquipoService;
+import com.apirest.full.service.GrupoService;
 
 import jakarta.websocket.server.PathParam;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping("/equipo")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class EquipoController {
-    @Autowired
-    private EquipoService equipoService;
+
+    private final EquipoService equipoService;
+
+    private final GrupoService grupoService;
 
     @GetMapping()
-    public List<EquipoModel> obtenerEquipos(){
+    public List<EquipoModel> obtenerEquipos() {
         return equipoService.obtenerEquipo();
     }
 
-    @PostMapping()
-    public EquipoModel guardar(@RequestBody EquipoModel equipoModel){
+    @PostMapping
+    public EquipoModel guardar(@RequestBody EquipoModel equipoModel) {
+
         return equipoService.guardarEquipo(equipoModel);
     }
 
     @GetMapping("/cantidad")
-    public Long cantidadEquipos(){
+    public Long cantidadEquipos() {
         return equipoService.cantidad();
     }
 
     @PostMapping("/saveall")
-    public List<EquipoModel> salvarVarios(@RequestBody List<EquipoModel> equipoModels){
+    public List<EquipoModel> salvarVarios(@RequestBody List<EquipoModel> equipoModels) {
         return equipoService.agregarVarios(equipoModels);
     }
 
     @GetMapping("/query")
-    public List<EquipoModel> obtenerPorPuntaje(@RequestParam("puntaje") int puntaje){
+    public List<EquipoModel> obtenerPorPuntaje(@RequestParam("puntaje") int puntaje) {
         return equipoService.buscarPorPuntaje(puntaje);
     }
 
     @GetMapping(path = "/{id}")
-    public Optional<EquipoModel> obtenerPorId(@PathParam("id") Long id){
+    public Optional<EquipoModel> obtenerPorId(@PathParam("id") Long id) {
         return equipoService.buscarPorId(id);
     }
 
     @DeleteMapping(path = "/{id}")
-    public String eliminarPorId(@PathVariable("id") Long id){
+    public String eliminarPorId(@PathVariable("id") Long id) {
         boolean ok = equipoService.eliminar(id);
-        if (ok){
-            return "El id: "+id+" fue eliminado correctamente";
+        if (ok) {
+            return "El id: " + id + " fue eliminado correctamente";
         } else {
             return "Algo salio mal :(";
         }
     }
 
     @DeleteMapping("/delete")
-    public void eliminarTodo(){
+    public void eliminarTodo() {
         equipoService.borrarTodo();
     }
 }
