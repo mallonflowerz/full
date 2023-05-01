@@ -10,16 +10,10 @@ import java.util.Random;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.apirest.full.model.EquipoModel;
 import com.apirest.full.model.faseFinalModels.RoundOf16;
-import com.apirest.full.model.gruposModels.GrupoAModel;
-import com.apirest.full.model.gruposModels.GrupoBModel;
-import com.apirest.full.model.gruposModels.GrupoCModel;
-import com.apirest.full.model.gruposModels.GrupoDModel;
+import com.apirest.full.service.EquipoService;
 import com.apirest.full.service.faseFinalServices.RoundOf16Services;
-import com.apirest.full.service.gruposServices.GrupoAService;
-import com.apirest.full.service.gruposServices.GrupoBService;
-import com.apirest.full.service.gruposServices.GrupoCService;
-import com.apirest.full.service.gruposServices.GrupoDService;
 
 import lombok.AllArgsConstructor;
 
@@ -29,15 +23,9 @@ import lombok.AllArgsConstructor;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class RoundOf16Controller {
 
-    private final GrupoBService grupoBService;
-
     private final RoundOf16Services roundOf16Services;
 
-    private final GrupoAService grupoAService;
-
-    private final GrupoCService grupoCService;
-
-    private final GrupoDService grupoDService;
+    private final EquipoService equipoService;
 
     @GetMapping()
     public List<RoundOf16> obtenerRonda() {
@@ -71,30 +59,14 @@ public class RoundOf16Controller {
     @GetMapping("/saveRound")
     public List<RoundOf16> guardarRonda() {
         List<RoundOf16> roundAll = roundOf16Services.obtenerTodo();
-        List<GrupoAModel> listaGrupoA = grupoAService.topTwo();
-        List<GrupoBModel> listaGrupoB = grupoBService.topTwo();
-        List<GrupoCModel> listaGrupoC = grupoCService.topTwo();
-        List<GrupoDModel> listaGrupoD = grupoDService.topTwo();
         List<String> listaName = new ArrayList<>();
         //List<RoundOf16> listaRound = new ArrayList<>();
         int cont = 0;
 
-        if (!listaGrupoA.isEmpty() && listaGrupoA.size() == 2) {
-            listaName.add(listaGrupoA.get(0).getNombre());
-            listaName.add(listaGrupoA.get(1).getNombre());
-        }
-        if (!listaGrupoB.isEmpty() && listaGrupoB.size() == 2) {
-            listaName.add(listaGrupoB.get(0).getNombre());
-            listaName.add(listaGrupoB.get(1).getNombre());
-        }
-        if (!listaGrupoC.isEmpty() && listaGrupoC.size() == 2) {
-            listaName.add(listaGrupoC.get(0).getNombre());
-            listaName.add(listaGrupoC.get(1).getNombre());
-        }
-        if (!listaGrupoD.isEmpty() && listaGrupoD.size() == 2) {
-            listaName.add(listaGrupoD.get(0).getNombre());
-            listaName.add(listaGrupoD.get(1).getNombre());
-        }
+        roundAll.forEach(dato -> {
+            listaName.add(dato.getEquipo1());
+            listaName.add(dato.getEquipo2());
+        });
 
         Collections.shuffle(listaName);
 
@@ -113,6 +85,17 @@ public class RoundOf16Controller {
         }
 
         return roundOf16Services.obtenerTodo();
+    }
+
+    @PostMapping("/save/{id}")
+    public RoundOf16 guardarEquipos(@PathVariable Long id){
+        List<EquipoModel> listaGrupo = equipoService.buscarDosPrimeros(id);
+        RoundOf16 rOf16 = new RoundOf16();
+        rOf16.setEquipo1(listaGrupo.get(0).getNombre());
+        rOf16.setEquipo2(listaGrupo.get(1).getNombre());
+        rOf16.setResulEquipo1(0);
+        rOf16.setResulEquipo2(0);
+        return roundOf16Services.guardar(rOf16);
     }
 
     @PostMapping("/result/{min}/{max}")

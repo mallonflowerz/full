@@ -29,10 +29,6 @@ public class GrupoService {
         return grupoRepository.findById(id);
     }
 
-    // public List<GrupoModel> topTwo(){
-    //     return grupoRepository.findTop2ByOrderByPuntajeDesc();
-    // }
-
     public boolean eliminarPorId(Long id){
         try {
             grupoRepository.deleteById(id);

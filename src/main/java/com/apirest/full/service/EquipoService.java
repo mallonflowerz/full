@@ -31,6 +31,10 @@ public class EquipoService {
         return equipoRepository.findByPuntaje(puntaje);
     }
 
+    public List<EquipoModel> buscarDosPrimeros(Long id){
+        return equipoRepository.encontrarDosMejoresEquiposPorGrupo(id);
+    }
+
     public Optional<EquipoModel> buscarPorId(Long id){
         return equipoRepository.findById(id);
     }

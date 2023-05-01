@@ -17,4 +17,7 @@ public interface EquipoRepository extends JpaRepository<EquipoModel, Long> {
 
     @Query("SELECT e FROM EquipoModel e WHERE e.grupo.id = :id ORDER BY e.puntaje DESC")
     List<EquipoModel> findByGrupo(@Param("id") Long id);
+    @Query("SELECT e FROM EquipoModel e WHERE e.grupo.id = :grupoId ORDER BY e.puntaje DESC LIMIT 2")
+    List<EquipoModel> encontrarDosMejoresEquiposPorGrupo(@Param("grupoId") Long grupoId);
+
 }
