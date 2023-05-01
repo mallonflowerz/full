@@ -38,7 +38,7 @@ public class GrupoAService {
         return grupoARepository.save(grupoAModel);
     }
 
-    public Long cantidad(){
+    public Long cantidad(){ 
         return grupoARepository.count();
     }
 

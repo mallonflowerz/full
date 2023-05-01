@@ -35,6 +35,14 @@ public class EquipoService {
         return equipoRepository.findById(id);
     }
 
+    public List<EquipoModel> buscarGrupo(Long id){
+        return equipoRepository.findByGrupo(id);
+    }
+
+    public int cantidadGrupo(Long id){
+        return equipoRepository.findByGrupo(id).size();
+    }
+
     public void borrarTodo(){
         equipoRepository.deleteAll();
     }
@@ -50,6 +58,15 @@ public class EquipoService {
     public boolean eliminar(Long id){
         try {
             equipoRepository.deleteById(id);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean eliminarPorGrupo(List<EquipoModel> lista){
+        try {
+            equipoRepository.deleteAll(lista);
             return true;
         } catch (Exception e) {
             return false;

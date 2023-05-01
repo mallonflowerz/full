@@ -2,6 +2,8 @@ package com.apirest.full.model;
 
 import java.util.Optional;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -17,6 +19,7 @@ public class EquipoModel {
 
     private String nombre;
     private int puntaje;
+    private int partidos;
 
     @ManyToOne
     @JoinColumn(name = "grupo_id")

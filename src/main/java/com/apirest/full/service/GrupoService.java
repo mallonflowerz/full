@@ -29,6 +29,28 @@ public class GrupoService {
         return grupoRepository.findById(id);
     }
 
+    // public List<GrupoModel> topTwo(){
+    //     return grupoRepository.findTop2ByOrderByPuntajeDesc();
+    // }
+
+    public boolean eliminarPorId(Long id){
+        try {
+            grupoRepository.deleteById(id);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean eliminarTodo(){
+        try {
+            grupoRepository.deleteAll();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public GrupoModel buscarPorNombre(String nombre){
         return grupoRepository.findByNombre(nombre);
     }

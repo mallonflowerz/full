@@ -1,10 +1,15 @@
 package com.apirest.full.controller;
 
+import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.apirest.full.model.EquipoModel;
 import com.apirest.full.model.GrupoModel;
@@ -21,40 +26,40 @@ public class GrupoController {
 
     private final GrupoService grupoService;
 
-    private final EquipoService equipoService;
-
-    @GetMapping()
-    public List<GrupoModel> obtenerTodo() {
-        return grupoService.obtenerAll();
+    @GetMapping
+    public ResponseEntity<List<GrupoModel>> obtenerTodo() {
+        List<GrupoModel> all = grupoService.obtenerAll();
+        return ResponseEntity.ok(all);
     }
 
     @PostMapping
-    public GrupoModel guardar(@RequestBody GrupoModel grupoModel) {
-        return grupoService.guardar(grupoModel);
+    public ResponseEntity<GrupoModel> guardar(@RequestBody GrupoModel grupoModel) {
+        GrupoModel grupoM = grupoService.guardar(grupoModel);
+
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(grupoM.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).body(grupoM);
     }
-
-    // @PostMapping("/agg/{id1}/{id2}")
-    // public GrupoModel guardarEquipo(@PathVariable("id1") Long id1, @PathVariable("id2") Long id2) {
-    //     // GrupoModel grupoModel = new GrupoModel();
-    //     // EquipoModel equipoModel = new EquipoModel();
-    //     // Optional<GrupoModel> grupoModelOp = grupoService.obtenerPorId(id2);
-    //     // Optional<EquipoModel> equipoModelOp = equipoService.buscarPorId(id1);
-    //     // List<EquipoModel> lista = new ArrayList<>();
-    //     // equipoModel.setId(equipoModelOp.get().getId());
-    //     // equipoModel.setNombre(equipoModelOp.get().getNombre());
-    //     // equipoModel.setPuntaje(equipoModelOp.get().getPuntaje());
-    //     // grupoModel.setId(grupoModelOp.get().getId());
-    //     // grupoModel.setNombre(grupoModelOp.get().getNombre());
-    //     // lista.add(equipoModel);
-    //     // grupoModel.setEquipos(lista);
-    //     // equipoModel.setGrupo(grupoModel);
-
-    //     return grupoModel;
-
-    // }
 
     @PostMapping("/{nombre}")
-    public GrupoModel buscarPorNombre(@PathVariable("nombre") String nombre) {
-        return grupoService.buscarPorNombre(nombre);
+    public ResponseEntity<GrupoModel> buscarPorNombre(@PathVariable("nombre") String nombre) {
+        GrupoModel gModel = grupoService.buscarPorNombre(nombre);
+        return ResponseEntity.ok(gModel);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminarEquipo(@PathVariable Long id) {
+        grupoService.eliminarPorId(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/deleteAll")
+    public ResponseEntity<Void> eliminarTodo(){
+        grupoService.eliminarTodo();
+        return ResponseEntity.noContent().build();
+    }
+
 }

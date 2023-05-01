@@ -1,12 +1,12 @@
-package com.apirest.full.model.mapper;
+// package com.apirest.full.model.mapper;
 
-import org.springframework.stereotype.Service;
+// import org.springframework.stereotype.Service;
 
-import lombok.RequiredArgsConstructor;
+// import lombok.RequiredArgsConstructor;
 
-@Service
-@RequiredArgsConstructor
-public class GrupoMapper {
+// @Service
+// @RequiredArgsConstructor
+// public class GrupoMapper {
     
     
-}
+// }
