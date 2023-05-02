@@ -2,10 +2,9 @@ package com.apirest.full.controller.faseFinalControllers;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,16 +32,16 @@ public class RoundOf16Controller {
     }
 
     @GetMapping("/count")
-    public Long cantidadData(){
+    public Long cantidadData() {
         return roundOf16Services.cantidad();
     }
 
     @GetMapping("/reset")
-    public List<RoundOf16> resetearResult(){
+    public List<RoundOf16> resetearResult() {
         List<RoundOf16> roundAll = roundOf16Services.obtenerTodo();
-        //List<RoundOf16> lista = new ArrayList<>();
+        // List<RoundOf16> lista = new ArrayList<>();
 
-        for (RoundOf16 rOf16: roundAll){
+        for (RoundOf16 rOf16 : roundAll) {
             RoundOf16 roundOf16 = new RoundOf16();
             roundOf16.setId(rOf16.getId());
             roundOf16.setEquipo1(rOf16.getEquipo1());
@@ -50,7 +49,7 @@ public class RoundOf16Controller {
             roundOf16.setResulEquipo1(0);
             roundOf16.setResulEquipo2(0);
             roundOf16Services.guardar(roundOf16);
-            //lista.add(roundOf16);
+            // lista.add(roundOf16);
         }
 
         return roundOf16Services.obtenerTodo();
@@ -60,7 +59,7 @@ public class RoundOf16Controller {
     public List<RoundOf16> guardarRonda() {
         List<RoundOf16> roundAll = roundOf16Services.obtenerTodo();
         List<String> listaName = new ArrayList<>();
-        //List<RoundOf16> listaRound = new ArrayList<>();
+        // List<RoundOf16> listaRound = new ArrayList<>();
         int cont = 0;
 
         roundAll.forEach(dato -> {
@@ -72,7 +71,7 @@ public class RoundOf16Controller {
 
         for (int i = 0; i < listaName.size() - 1; i += 2) {
             RoundOf16 roundOf16 = new RoundOf16();
-            if (!roundAll.isEmpty()){
+            if (!roundAll.isEmpty()) {
                 roundOf16.setId(roundAll.get(cont).getId());
             }
             roundOf16.setEquipo1(listaName.get(i));
@@ -80,15 +79,15 @@ public class RoundOf16Controller {
             roundOf16.setResulEquipo1(0);
             roundOf16.setResulEquipo2(0);
             roundOf16Services.guardar(roundOf16);
-            //listaRound.add(roundOf16);
-            cont +=1;
+            // listaRound.add(roundOf16);
+            cont += 1;
         }
 
         return roundOf16Services.obtenerTodo();
     }
 
     @PostMapping("/save/{id}")
-    public RoundOf16 guardarEquipos(@PathVariable Long id){
+    public RoundOf16 guardarEquipos(@PathVariable Long id) {
         List<EquipoModel> listaGrupo = equipoService.buscarDosPrimeros(id);
         RoundOf16 rOf16 = new RoundOf16();
         rOf16.setEquipo1(listaGrupo.get(0).getNombre());
@@ -99,11 +98,11 @@ public class RoundOf16Controller {
     }
 
     @PostMapping("/result/{min}/{max}")
-    public List<RoundOf16> generarResultados(@PathVariable("min") int min, @PathVariable("max") int max){
+    public List<RoundOf16> generarResultados(@PathVariable("min") int min, @PathVariable("max") int max) {
         List<RoundOf16> roundAll = roundOf16Services.obtenerTodo();
-        //List<RoundOf16> lista = new ArrayList<>();
+        // List<RoundOf16> lista = new ArrayList<>();
 
-        for (RoundOf16 rOf16: roundAll){
+        for (RoundOf16 rOf16 : roundAll) {
             Random random = new Random();
             int[] result = new int[2];
             RoundOf16 roundOf16 = new RoundOf16();
@@ -115,11 +114,123 @@ public class RoundOf16Controller {
             roundOf16.setResulEquipo1(result[0]);
             roundOf16.setResulEquipo2(result[1]);
             roundOf16Services.guardar(roundOf16);
-            //lista.add(roundOf16);
+            // lista.add(roundOf16);
         }
 
         return roundOf16Services.obtenerTodo();
     }
+
+    @GetMapping("/playRound")
+    public List<RoundOf16> cuartosDeFinal() {
+        List<RoundOf16> roundAll = roundOf16Services.obtenerTodo();
+        List<String> listaName = new ArrayList<>();
+        //List<RoundOf16> listaRound = new ArrayList<>();
+        int cont = 0;
+
+        roundAll.forEach(dato -> {
+            if (dato.getResulEquipo1() > dato.getResulEquipo2()) {
+                listaName.add(dato.getEquipo1());
+            }
+            if (dato.getResulEquipo2() > dato.getResulEquipo1()) {
+                listaName.add(dato.getEquipo2());
+            }
+            if (dato.getResulEquipo2() == dato.getResulEquipo1()) {
+                Random random = new Random();
+                int[] result = new int[2];
+                RoundOf16 roundOf16 = new RoundOf16();
+                result[0] = random.nextInt(100 - 0 + 1) + 0;
+                result[1] = random.nextInt(100 - 0 + 1) + 0;
+                while (result[0] == result[1]) {
+                    result[1] = random.nextInt(100 - 0 + 1) + 0;
+                }
+                roundOf16.setId(dato.getId());
+                roundOf16.setEquipo1(dato.getEquipo1());
+                roundOf16.setEquipo2(dato.getEquipo2());
+                roundOf16.setResulEquipo1(result[0]);
+                roundOf16.setResulEquipo2(result[1]);
+                if (roundOf16.getResulEquipo1() > roundOf16.getResulEquipo2()){
+                    listaName.add(roundOf16.getEquipo1());
+                } else if (roundOf16.getResulEquipo2() > roundOf16.getResulEquipo1()) {
+                    listaName.add(roundOf16.getEquipo2());
+                }
+            }
+        });
+
+        roundOf16Services.eliminarTodo();
+        Collections.shuffle(listaName);
+
+        for (int i = 0; i < listaName.size() - 1; i += 2) {
+            RoundOf16 roundOf16 = new RoundOf16();
+            if (!roundAll.isEmpty()) {
+                roundOf16.setId(roundAll.get(cont).getId());
+            }
+            roundOf16.setEquipo1(listaName.get(i));
+            roundOf16.setEquipo2(listaName.get(i + 1));
+            roundOf16.setResulEquipo1(0);
+            roundOf16.setResulEquipo2(0);
+            roundOf16Services.guardar(roundOf16);
+            //listaRound.add(roundOf16);
+            cont += 1;
+        }
+
+        return roundOf16Services.obtenerTodo();
+    }
+
+    // @GetMapping("/semisFinal")
+    // public List<RoundOf16> semisFinal() {
+    //     List<RoundOf16> roundAll = roundOf16Services.obtenerTodo();
+    //     List<String> listaName = new ArrayList<>();
+    //     //List<RoundOf16> listaRound = new ArrayList<>();
+    //     int cont = 0;
+
+    //     roundAll.forEach(dato -> {
+    //         if (dato.getResulEquipo1() > dato.getResulEquipo2()) {
+    //             listaName.add(dato.getEquipo1());
+    //         }
+    //         if (dato.getResulEquipo2() > dato.getResulEquipo1()) {
+    //             listaName.add(dato.getEquipo2());
+    //         }
+    //         if (dato.getResulEquipo2() == dato.getResulEquipo1()) {
+    //             Random random = new Random();
+    //             int[] result = new int[2];
+    //             RoundOf16 roundOf16 = new RoundOf16();
+    //             result[0] = random.nextInt(100 - 0 + 1) + 0;
+    //             result[1] = random.nextInt(100 - 0 + 1) + 0;
+    //             while (result[0] == result[1]) {
+    //                 result[1] = random.nextInt(100 - 0 + 1) + 0;
+    //             }
+    //             roundOf16.setId(dato.getId());
+    //             roundOf16.setEquipo1(dato.getEquipo1());
+    //             roundOf16.setEquipo2(dato.getEquipo2());
+    //             roundOf16.setResulEquipo1(result[0]);
+    //             roundOf16.setResulEquipo2(result[1]);
+    //             if (roundOf16.getResulEquipo1() > roundOf16.getResulEquipo2()){
+    //                 listaName.add(roundOf16.getEquipo1());
+    //             } else if (roundOf16.getResulEquipo2() > roundOf16.getResulEquipo1()) {
+    //                 listaName.add(roundOf16.getEquipo2());
+    //             }
+    //         }
+    //     });
+
+    //     roundOf16Services.eliminarTodo();
+    //     Collections.shuffle(listaName);
+
+    //     for (int i = 0; i < listaName.size() - 1; i += 2) {
+    //         RoundOf16 roundOf16 = new RoundOf16();
+    //         if (!roundAll.isEmpty()) {
+    //             roundOf16.setId(roundAll.get(cont).getId());
+    //         }
+    //         roundOf16.setEquipo1(listaName.get(i));
+    //         roundOf16.setEquipo2(listaName.get(i + 1));
+    //         roundOf16.setResulEquipo1(0);
+    //         roundOf16.setResulEquipo2(0);
+    //         roundOf16Services.guardar(roundOf16);
+    //         //listaRound.add(roundOf16);
+    //         cont += 1;
+    //     }
+
+    //     return roundOf16Services.obtenerTodo();
+    // }
 
     @DeleteMapping("/deleteForId/{id}")
     public String eliminarPorId(@PathVariable("id") Long id) {
@@ -132,7 +243,7 @@ public class RoundOf16Controller {
     }
 
     @DeleteMapping("/deleteAll")
-    public String eliminarTodo(){
+    public String eliminarTodo() {
         boolean ok = roundOf16Services.eliminarTodo();
         if (ok) {
             return "Eliminado todo correctamente";

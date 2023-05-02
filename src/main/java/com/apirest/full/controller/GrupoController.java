@@ -1,19 +1,13 @@
 package com.apirest.full.controller;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
-import java.util.Random;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.apirest.full.model.EquipoModel;
 import com.apirest.full.model.GrupoModel;
-import com.apirest.full.service.EquipoService;
 import com.apirest.full.service.GrupoService;
 
 import lombok.AllArgsConstructor;

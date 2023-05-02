@@ -1,9 +1,5 @@
 package com.apirest.full.model;
 
-import java.util.Optional;
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import jakarta.persistence.*;
 import lombok.Data;
 
